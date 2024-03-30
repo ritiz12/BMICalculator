@@ -5,7 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.fxml.Initializable;
+
+import javax.swing.JOptionPane;
 
 public class BMIController {
 
@@ -17,11 +18,11 @@ public class BMIController {
 
     @FXML
     private ChoiceBox<String> heightChoiceBox;
-@FXML
-private TextField outputStatusText;
+     @FXML
+     public TextField outputStatusText;
     @FXML
     private ChoiceBox<String> weightChoiceBox;
-    private BMICalculator bmiCalculator = new BMICalculator();
+    BMICalculator bmiCalculator = new BMICalculator();
     @FXML
     private TextField outputText;
     public BMIController() {
@@ -31,14 +32,63 @@ private TextField outputStatusText;
         this.bmiCalculator = bmiCalculator;
     }
 
-
     @FXML
     public void onCalculateButtonClick() {
-String heightValue = heightText.getText();
-String weightValue = weightText.getText();
-String heightUnit = heightChoiceBox.getValue();
-String weightUnit = weightChoiceBox.getValue();
+         String heightValue = "";
+        String weightValue = "";
+        String heightUnit = "";
+        String weightUnit = "";
+        try
+        {
+             heightValue = heightText.getText();
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        try
+        {
+            weightValue = weightText.getText();
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        try
+        {
+             heightUnit = heightChoiceBox.getValue();
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        try
+        {
+             weightUnit = weightChoiceBox.getValue();
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
 
+
+ if(heightValue.isEmpty())
+ {
+     JOptionPane.showMessageDialog(null, "Please enter value for Height", "Input Error", JOptionPane.ERROR_MESSAGE);
+ }
+        if(weightValue.isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Please enter value for Weight", "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
+        if(heightUnit == null)
+        {
+            JOptionPane.showMessageDialog(null, "Please enter Unit for Height", "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
+        if(weightUnit == null
+        )
+        {
+            JOptionPane.showMessageDialog(null, "Please enter Unit for Weight", "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
 try
 {
     double height = Double.parseDouble(heightValue);
@@ -46,28 +96,15 @@ try
 
     double bmiValue = bmiCalculator.calculateBMI(height , weight , heightUnit,weightUnit);
     outputText.setText(String.format("%.2f", bmiValue));
+   String bmiStatusValue =  bmiCalculator.bmiStatus(bmiValue);
+    outputStatusText.setText(bmiStatusValue);
 
-    if(bmiValue < 18)
-    {
-outputStatusText.setText("UnderWeight");
-    }
-    else if(bmiValue >= 18 && bmiValue < 25)
-    {
-        outputStatusText.setText("Normal");
-    }
-    else if(bmiValue >= 25 && bmiValue < 30)
-    {
-        outputStatusText.setText("Overweight");
-    }
-    else if(bmiValue >= 35 )
-    {
-        outputStatusText.setText("Over 30 ");
-    }
 }
 catch (Exception ex)
 {
     outputText.setText("Please Enter Valid Value for height and weight");
 }
     }
+
 
 }
